@@ -1,0 +1,98 @@
+{{#if visibility === 'visible'}}
+<section ref:gallery class="gallery" role="dialog" aria-live="polite" aria-labelledby="gallery-title" aria-describedby="gallery-description" tabindex="-1">
+  <p id="gallery-title" class="a11y">{{title}}</p>
+  <figure class="gallery__fig">
+    <img src="{{getImageSrc}}" alt="{{getImageAlt}}" class="gallery__fig__image">
+    <figcaption id="gallery-description" class="gallery__fig__caption">{{getImageDescription}}</figcaption>
+  </figure>
+  <IconButton id="previous" icon="icon-previous" classes="gallery__btn gallery__btn--previous" text="View previous image" on:button:click="onButtonClick(event)" />
+  <IconButton id="next" icon="icon-next" classes="gallery__btn gallery__btn--next" text="View next image" on:button:click="onButtonClick(event)" />
+  <IconButton id="close" icon="icon-no" classes="icon-button--small gallery__btn gallery__btn--close" text="Close gallery" on:button:click="set({visibility: 'hidden'})" />
+</section>
+{{/if}}
+
+<script>
+  import IconButton from './icon-button.html';
+
+  const EVENT_NAME_SPACE = 'gallery';
+
+  function determineIndex(id, imageCount, index) {
+    if (id === 'previous') {
+      return (index > 0) ? (index - 1) : imageCount;
+    } else if (id === 'next') {
+      return (index < imageCount) ? (index + 1) : 0;
+    }
+
+    return 0;
+  }
+
+  function removeGallery(gallery) {
+    return (event) => {
+      if (event.keyCode !== 27) return;
+
+      gallery.set({ visibility: 'hidden' });
+    };
+  }
+
+  function focusGallery(gallery) {
+    return () => {
+      if (!gallery.refs.gallery) return;
+      gallery.refs.gallery.focus();
+    };
+  }
+
+  export default {
+    data() {
+      return {
+        images: [],
+        index: 0,
+        title: '',
+        visibility: 'hidden'
+      };
+    },
+    oncreate() {
+      const gallery = this;
+      const keypressHandler = removeGallery(gallery);
+
+      this.observe('visibility', (visibility) => {
+        if (visibility === 'visible') {
+          requestAnimationFrame(focusGallery(gallery));
+          window.addEventListener('keyup', keypressHandler);
+        } else if (visibility === 'hidden') {
+          window.removeEventListener('keyup', keypressHandler);
+        }
+      });
+    },
+    computed: {
+      getImageSrc: (images, index) => {
+        return images[index].src;
+      },
+      getImageAlt: (images, index) => {
+        return images[index].alt;
+      },
+      getImageDescription: (images, index) => {
+        return images[index].description;
+      }
+    },
+    methods: {
+      onButtonClick(event) {
+        const { id } = event;
+        const images = this.get('images');
+        const prevIndex = this.get('index');
+        const imageCount = (images.length - 1);
+        const currIndex = determineIndex(id, imageCount, prevIndex);
+        const eventName = `${EVENT_NAME_SPACE}:button:click`;
+
+        this.set({ index: currIndex });
+        this.fire(eventName, {
+          type: eventName,
+          index: currIndex,
+          image: images[currIndex]
+        });
+      }
+    },
+    components: {
+      IconButton
+    }
+  };
+</script>
