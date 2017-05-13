@@ -4,9 +4,11 @@
   "description": "Nathan Penn Photography portfolio website",
   "main": "index.js",
   "scripts": {
-    "pretest": "node pre-test-component-builder.js",
-    "test": "mocha test/unit/.setup.js test/unit/**/*.js",
-    "posttest": "rm -rf test/unit/_tmp && rm tmp-components.js"
+    "test": "npm run test:unit",
+    "build:components": "rollup -c rollup.config.js",
+    "pretest:unit": "node pre-test-component-builder.js",
+    "test:unit": "mocha test/unit/.setup.js test/unit/**/*.js",
+    "posttest:unit": "rm -rf test/unit/_tmp && rm tmp-components.js"
   },
   "author": "Matthew Burrows <mattjburrows@gmail.com>",
   "license": "ISC",
