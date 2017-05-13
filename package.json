@@ -1,0 +1,28 @@
+{
+  "name": "nathanpennphotography.github.io",
+  "version": "1.0.0",
+  "description": "Nathan Penn Photography portfolio website",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "node pre-test-component-builder.js",
+    "test": "mocha test/unit/.setup.js test/unit/**/*.js",
+    "posttest": "rm -rf test/unit/_tmp && rm tmp-components.js"
+  },
+  "author": "Matthew Burrows <mattjburrows@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "cheerio": "^0.22.0",
+    "filehound": "^1.16.1",
+    "jsdom": "^9.12.0",
+    "lodash": "^4.17.4",
+    "mocha": "^3.2.0",
+    "rollup": "^0.41.6",
+    "rollup-plugin-buble": "^0.15.0",
+    "rollup-plugin-memory": "^2.0.0",
+    "rollup-plugin-svelte": "^1.6.1",
+    "rollup-plugin-uglify": "^1.0.1",
+    "sass-mq": "^3.3.2",
+    "sinon": "^2.1.0",
+    "svelte-cli": "1.3.5"
+  }
+}
