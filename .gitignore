@@ -38,3 +38,9 @@ jspm_packages
 
 # OS junk
 .DS_Store
+
+# Sass
+.sass-cache
+
+# Jekyll
+_site
