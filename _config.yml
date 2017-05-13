@@ -1,0 +1,11 @@
+name: Nathan Penn General Studio Photographer
+copyright: Nathan Penn Photography
+permalink: pretty
+defaults:
+  -
+    scope:
+      type: "pages"
+    values:
+      layout: "default"
+sass:
+    style: compressed

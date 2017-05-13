@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>{{site.name}}{% if page.title %} - {{page.title}}{% endif %}</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script>document.querySelector('html').classList.add('js');</script>
+  </head>
+  <body>
+    <div class="main js-main">
+      <h1 class="a11y">{{site.name}}{% if page.title %} - {{page.title}}{% endif %}</h1>
+      <div class="main__navigation">
+        <div class="js-navigation-toggle"></div>
+        {% include layout/navigation.html %}
+        {{page.text}}
+      </div>
+      <div class="main__content">
+        {% include layout/svg-definitions.html %}
+        <main class="main__content__body content">
