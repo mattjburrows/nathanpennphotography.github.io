@@ -1,0 +1,25 @@
+$icon-button-icon-dimensions: 32px;
+$icon-button-icon-small-dimensions: 16px;
+$icon-button-color: $font-color;
+
+.icon-button {
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 4px;
+  overflow: hidden;
+  cursor: pointer;
+
+  &.icon-button--small {
+    .icon-button__icon {
+      width: $icon-button-icon-small-dimensions;
+      height: $icon-button-icon-small-dimensions;
+    }
+  }
+
+  .icon-button__icon {
+    width: $icon-button-icon-dimensions;
+    height: $icon-button-icon-dimensions;
+    fill: $icon-button-color;
+  }
+}

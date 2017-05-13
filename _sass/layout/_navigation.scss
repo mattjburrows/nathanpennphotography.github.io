@@ -1,0 +1,27 @@
+$navigation-mobile-width: $main-navigation-width;
+$navigation-item-border-color: lighten($font-color, 33%);
+
+.navigation {
+  position: relative;
+  padding-bottom: 8px;
+
+  @include mq($until: tablet) {
+    &--open {
+      -webkit-transform: translate3d($navigation-mobile-width, 0, 0);
+      transform: translate3d($navigation-mobile-width, 0, 0);
+    }
+  }
+
+  .navigation__item {
+    padding-top: 8px;
+    padding-right: 4px;
+    padding-bottom: 8px;
+    padding-left: 4px;
+    border-bottom: 1px solid $navigation-item-border-color;
+  }
+
+  .navigation__link {
+    color: $font-color;
+    text-decoration: none;
+  }
+}

@@ -1,0 +1,63 @@
+$gallery-background: #fff;
+$gallery-shadow: rgba(0, 0, 0, .33);
+$gallery-btn-color: $font-color;
+
+.gallery {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
+  left: 8px;
+  border-radius: 8px;
+  background-color: $gallery-background;
+  box-shadow: 0 0 5px $gallery-shadow;
+
+  .gallery__fig {
+    height: 100%;
+    display: flex;
+    flex-flow: row wrap;
+
+    &__image,
+    &__caption {
+      flex: 1 100%;
+      padding: 8px;
+    }
+    &__image {
+      align-self: center;
+      text-align: center;
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+
+    &__caption {
+      align-self: flex-end;
+    }
+  }
+
+  .gallery__btn {
+    position: absolute;
+    top: 50%;
+
+    &--close {
+      top: 8px;
+      right: 8px;
+    }
+
+    &--previous,
+    &--next {
+      top: 50%;
+      fill: $gallery-btn-color;
+    }
+
+    &--previous {
+      left: 8px;
+    }
+
+    &--next {
+      right: 8px;
+    }
+  }
+}

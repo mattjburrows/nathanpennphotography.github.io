@@ -1,0 +1,76 @@
+.main {
+  font-size: .75rem;
+  line-height: 1.25;
+  @include clearfloats;
+
+  @include mq($from: tablet) {
+    padding-left: $main-navigation-width;
+  }
+
+  @include mq($until: tablet) {
+    -webkit-transition: transform $animation-ease $animation-duration 0s;
+    transition: transform $animation-ease $animation-duration 0s;
+
+    &--navigation-open {
+      -webkit-transform: translate3d($main-navigation-width, 0, 0);
+      transform: translate3d($main-navigation-width, 0, 0);
+    }
+  }
+
+  .main__navigation {
+    position: relative;
+    padding-right: 8px;
+    padding-left: 8px;
+    box-sizing: border-box;
+
+    &__toggle {
+      display: none;
+    }
+
+    .js & {
+      width: $main-navigation-width;
+      float: left;
+      margin-left: $main-navigation-width * -1;
+
+      &__toggle {
+        @include mq($until: tablet) {
+          position: absolute;
+          top: 0;
+          left: $main-navigation-width + 8px;
+          display: block;
+        }
+      }
+    }
+  }
+
+  &,
+  .main__content,
+  .main__navigation {
+    height: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+  }
+
+  .main__content {
+    display: flex;
+    flex-flow: row wrap;
+    padding: 8px;
+
+    @include mq($until: tablet) {
+      padding-top: 32px;
+    }
+
+    &__body,
+    &__footer {
+      flex: 1 100%;
+    }
+
+    &__body {
+      align-self: flex-start;
+    }
+
+    &__footer {
+      align-self: flex-end;
+    }
+  }
+}
