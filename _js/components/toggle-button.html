@@ -1,0 +1,35 @@
+<button class="toggle-button{{getClasses}}" on:click="onClick({ active: !active })">
+  <span class="toggle-button__label a11y">{{getLabel}} </span>{{text}}
+</button>
+
+<script>
+  const EVENT_NAME_SPACE = 'toggle-button';
+  export default {
+    data() {
+      return {
+        active: false,
+        classes: '',
+        labels: {
+          active: 'Close ',
+          inactive: 'Open '
+        },
+        text: 'Menu'
+      }
+    },
+    computed: {
+      getClasses: (classes) => classes ? ` ${classes}` : '',
+      getLabel: (active, labels) => active ? labels.active : labels.inactive
+    },
+    methods: {
+      onClick({ active }) {
+        const eventName = `${EVENT_NAME_SPACE}:click`;
+
+        this.set({ active });
+        this.fire(eventName, {
+          type: eventName,
+          active
+        });
+      }
+    }
+  };
+</script>
