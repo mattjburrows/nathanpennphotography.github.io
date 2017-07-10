@@ -1,7 +1,6 @@
 const _ = require('lodash');
 const FileHound = require('filehound');
 const fs = require('fs');
-const exec = require('child_process').exec;
 
 function getComponentFiles() {
   return FileHound.create()
@@ -51,4 +50,3 @@ function buildTestComponentsFiles() {
 }
 
 buildTestComponentsFiles();
-exec('rollup -c rollup.test.config.js');
