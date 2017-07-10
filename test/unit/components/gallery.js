@@ -66,7 +66,7 @@ describe('<Gallery>', () => {
 
         closeBtn.click();
 
-        assert.equal(document.querySelector('.gallery'), null);
+        assert.strictEqual(document.querySelector('.gallery'), null);
       });
 
       it('closes the gallery when the escape key is pressed', () => {
@@ -78,7 +78,7 @@ describe('<Gallery>', () => {
 
         triggerEscapeKeyEvent(window);
 
-        assert.equal(document.querySelector('.gallery'), null);
+        assert.strictEqual(document.querySelector('.gallery'), null);
       });
 
       describe('previous button', () => {

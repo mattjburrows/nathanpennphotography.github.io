@@ -25,7 +25,7 @@ describe('<IconButton>', () => {
       const { render } = getComponents('IconButton');
       const iconButton = render({}).element;
 
-      assert(iconButton.getAttribute('disabled') === null);
+      assert.strictEqual(iconButton.getAttribute('disabled'), null);
     });
 
     it('true when specified', () => {
