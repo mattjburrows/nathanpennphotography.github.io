@@ -1,66 +1,42 @@
 'use strict';
 
 const assert = require('assert');
-const cheerio = require('cheerio');
 const sinon = require('sinon');
 
-const { ToggleButton } = require('../_tmp/components');
-
-function createContainer(data) {
-  const container = document.createElement('div');
-  return container;
-}
+const getComponents = require('../getComponents');
 
 describe('<ToggleButton>', () => {
   it('adds text', () => {
-    const container = createContainer();
-    const toggleButton = new ToggleButton({
-      target: container,
-      data: { text: 'foo bar' }
-    });
+    const { render } = getComponents('ToggleButton');
+    const toggleButton = render({ text: 'foo bar' }).element;
 
-    assert(container.querySelector('.toggle-button').textContent.indexOf('foo bar') > 0);
+    assert(toggleButton.textContent.indexOf('foo bar') > 0);
   });
 
   describe('labels', () => {
     it('defaults to "Open " when active is false', () => {
-      const container = createContainer();
-      const toggleButton = new ToggleButton({
-        target: container,
-        data: {
-          active: false
-        }
-      });
-      const toggleButtonMarkup = container.querySelector('.toggle-button');
+      const { render } = getComponents('ToggleButton');
+      const toggleButton = render({ active: false }).element;
 
-      assert.equal(toggleButtonMarkup.querySelector('.toggle-button__label').textContent, 'Open ');
+      assert.equal(toggleButton.querySelector('.toggle-button__label').textContent.trim(), 'Open');
     });
 
     it('defaults to "Close " when active is true', () => {
-      const container = createContainer();
-      const toggleButton = new ToggleButton({
-        target: container,
-        data: {
-          active: true
-        }
-      });
-      const toggleButtonMarkup = container.querySelector('.toggle-button');
+      const { render } = getComponents('ToggleButton');
+      const toggleButton = render({ active: true }).element;
 
-      assert.equal(toggleButtonMarkup.querySelector('.toggle-button__label').textContent, 'Close ');
+      assert.equal(toggleButton.querySelector('.toggle-button__label').textContent.trim(), 'Close');
     });
   });
 
   describe('click', () => {
     it('triggers "toggle-button:click" event when clicked and toggles the active state', () => {
       const spy = sinon.spy();
-      const container = createContainer();
-      const toggleButton = new ToggleButton({
-        target: container,
-        data: {}
-      });
+      const { render } = getComponents('ToggleButton');
+      const toggleButton = render({});
 
-      toggleButton.on('toggle-button:click', spy);
-      container.querySelector('.toggle-button').click();
+      toggleButton.component.on('toggle-button:click', spy);
+      toggleButton.element.click();
 
       sinon.assert.calledOnce(spy);
       sinon.assert.calledWith(spy, {
@@ -68,7 +44,7 @@ describe('<ToggleButton>', () => {
         type: 'toggle-button:click'
       });
 
-      container.querySelector('.toggle-button').click();
+      toggleButton.element.click();
 
       sinon.assert.calledTwice(spy);
       sinon.assert.calledWith(spy, {

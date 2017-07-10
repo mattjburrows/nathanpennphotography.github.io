@@ -4,7 +4,8 @@ import buble from 'rollup-plugin-buble';
 export default {
   entry: 'tmp-components.js',
   dest: 'test/unit/_tmp/components.js',
-  format: 'cjs',
+  format: 'umd',
+  moduleName: 'Components',
   plugins: [
     svelte({
       css: false

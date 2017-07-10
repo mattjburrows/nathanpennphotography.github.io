@@ -56,7 +56,7 @@
 
       this.observe('visibility', (visibility) => {
         if (visibility === 'visible') {
-          requestAnimationFrame(focusGallery(gallery));
+          window.requestAnimationFrame(focusGallery(gallery));
           window.addEventListener('keyup', keypressHandler);
         } else if (visibility === 'hidden') {
           window.removeEventListener('keyup', keypressHandler);

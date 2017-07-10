@@ -2,11 +2,11 @@
 
 const _ = require('lodash');
 const assert = require('assert');
-const cheerio = require('cheerio');
 const sinon = require('sinon');
 
-const { Gallery } = require('../_tmp/components');
+const getComponents = require('../getComponents');
 
+const title = 'This is the title';
 const images = [{
   src: 'https://img.uno.com/460/300',
   alt: 'Uno alt',
@@ -20,24 +20,8 @@ const images = [{
   alt: 'Tres alt',
   description: 'Tres description'
 }];
-const title = 'This is the title';
 
-function createContainer(data) {
-  const container = document.createElement('div');
-
-  container.setAttribute('id', 'test');
-  document.body.appendChild(container);
-
-  return container;
-}
-
-function removeContainer() {
-  const container = document.querySelector('#test');
-
-  container.parentNode.removeChild(container);
-}
-
-function triggerEscapeKeyEvent() {
+function triggerEscapeKeyEvent(window) {
   const event = new window.Event('keyup');
   event.keyCode = 27;
 
@@ -45,28 +29,20 @@ function triggerEscapeKeyEvent() {
 }
 
 describe('<Gallery>', () => {
-  afterEach(removeContainer);
-
   describe('Visibility', () => {
     it('hidden by default', () => {
-      const container = createContainer();
-      const gallery = new Gallery({
-        target: container,
-        data: { images, title }
-      });
+      const { render } = getComponents('Gallery');
+      const gallery = render({ images, title }).element;
 
-      assert.equal(container.querySelector('.gallery'), null);
+      assert.strictEqual(gallery.tagName, undefined);
     });
 
     it('visible when set and is the focussed element', () => {
       const visibility = 'visible';
-      const container = createContainer();
-      const gallery = new Gallery({
-        target: container,
-        data: { images, title, visibility }
-      });
+      const { render, document } = getComponents('Gallery');
+      const gallery = render({ images, title, visibility }).element;
 
-      assert(container.firstElementChild.classList.contains('gallery'));
+      assert(document.getElementById('test-mount').firstElementChild.classList.contains('gallery'));
       assert(document.activeElement.classList.contains('gallery'));
     });
 
@@ -74,25 +50,44 @@ describe('<Gallery>', () => {
       const visibility = 'visible';
 
       it('sets the correct title', () => {
-        const container = createContainer();
-        const gallery = new Gallery({
-          target: container,
-          data: { images, title, visibility }
-        });
+        const { render } = getComponents('Gallery');
+        const gallery = render({ images, title, visibility }).element;
 
-        assert.equal(container.querySelector('#gallery-title').textContent, title);
+        assert.equal(gallery.querySelector('#gallery-title').textContent, title);
+      });
+
+      it('closes the gallery when the close button is clicked', () => {
+        const index = (images.length - 1);
+        const { render, document } = getComponents('Gallery');
+        const gallery = render({ images, title, visibility, index }).element;
+        const closeBtn = gallery.querySelector('.gallery__btn--close');
+
+        assert(gallery.classList.contains('gallery'));
+
+        closeBtn.click();
+
+        assert.equal(document.querySelector('.gallery'), null);
+      });
+
+      it('closes the gallery when the escape key is pressed', () => {
+        const index = (images.length - 1);
+        const { render, document, window } = getComponents('Gallery');
+        const gallery = render({ images, title, visibility, index }).element;
+
+        assert(gallery.classList.contains('gallery'));
+
+        triggerEscapeKeyEvent(window);
+
+        assert.equal(document.querySelector('.gallery'), null);
       });
 
       describe('previous button', () => {
         it('dispatches an event when clicked', (done) => {
-          const container = createContainer();
-          const gallery = new Gallery({
-            target: container,
-            data: { images, title, visibility }
-          });
-          const previousImageBtn = container.querySelector('.gallery__btn--previous');
+          const { render } = getComponents('Gallery');
+          const gallery = render({ images, title, visibility });
+          const previousImageBtn = gallery.element.querySelector('.gallery__btn--previous');
 
-          gallery.on('gallery:button:click', (event) => {
+          gallery.component.on('gallery:button:click', (event) => {
             assert.deepEqual(event, {
               type: 'gallery:button:click',
               index: 2,
@@ -106,14 +101,11 @@ describe('<Gallery>', () => {
         });
 
         it('cycles backwards through the images when clicked', () => {
-          const container = createContainer();
-          const gallery = new Gallery({
-            target: container,
-            data: { images, title, visibility }
-          });
-          const previousImageBtn = container.querySelector('.gallery__btn--previous');
-          const image = container.querySelector('.gallery__fig__image');
-          const description = container.querySelector('.gallery__fig__caption');
+          const { render } = getComponents('Gallery');
+          const gallery = render({ images, title, visibility });
+          const previousImageBtn = gallery.element.querySelector('.gallery__btn--previous');
+          const image = gallery.element.querySelector('.gallery__fig__image');
+          const description = gallery.element.querySelector('.gallery__fig__caption');
 
           _.rangeRight(images.length).forEach((number) => {
             previousImageBtn.click();
@@ -129,14 +121,11 @@ describe('<Gallery>', () => {
         const index = (images.length - 1);
 
         it('dispatches an event when clicked', (done) => {
-          const container = createContainer();
-          const gallery = new Gallery({
-            target: container,
-            data: { images, title, visibility, index }
-          });
-          const nextImageBtn = container.querySelector('.gallery__btn--next');
+          const { render } = getComponents('Gallery');
+          const gallery = render({ images, title, visibility, index });
+          const nextImageBtn = gallery.element.querySelector('.gallery__btn--next');
 
-          gallery.on('gallery:button:click', (event) => {
+          gallery.component.on('gallery:button:click', (event) => {
             assert.deepEqual(event, {
               type: 'gallery:button:click',
               index: 0,
@@ -150,14 +139,11 @@ describe('<Gallery>', () => {
         });
 
         it('cycles forward through the images when clicked', () => {
-          const container = createContainer();
-          const gallery = new Gallery({
-            target: container,
-            data: { images, title, visibility, index }
-          });
-          const nextImageBtn = container.querySelector('.gallery__btn--next');
-          const image = container.querySelector('.gallery__fig__image');
-          const description = container.querySelector('.gallery__fig__caption');
+          const { render } = getComponents('Gallery');
+          const gallery = render({ images, title, visibility, index });
+          const nextImageBtn = gallery.element.querySelector('.gallery__btn--next');
+          const image = gallery.element.querySelector('.gallery__fig__image');
+          const description = gallery.element.querySelector('.gallery__fig__caption');
 
           _.range(images.length).forEach((number) => {
             nextImageBtn.click();
@@ -167,37 +153,6 @@ describe('<Gallery>', () => {
             assert.equal(description.textContent, images[number].description);
           });
         });
-      });
-
-      it('closes the gallery when the close button is clicked', () => {
-        const container = createContainer();
-        const index = (images.length - 1);
-        const gallery = new Gallery({
-          target: container,
-          data: { images, title, visibility, index }
-        });
-        const closeBtn = container.querySelector('.gallery__btn--close');
-
-        assert(container.firstElementChild.classList.contains('gallery'));
-
-        closeBtn.click();
-
-        assert.equal(container.querySelector('.gallery'), null);
-      });
-
-      it('closes the gallery when the escape key is pressed', () => {
-        const container = createContainer();
-        const index = (images.length - 1);
-        const gallery = new Gallery({
-          target: container,
-          data: { images, title, visibility, index }
-        });
-
-        assert(container.firstElementChild.classList.contains('gallery'));
-
-        triggerEscapeKeyEvent();
-
-        assert.equal(container.querySelector('.gallery'), null);
       });
     });
   });
