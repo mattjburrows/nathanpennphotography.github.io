@@ -4,6 +4,7 @@
   "description": "Nathan Penn Photography portfolio website",
   "main": "index.js",
   "scripts": {
+    "start": "jekyll serve",
     "test": "npm run test:unit",
     "build:components": "rollup -c rollup.config.js",
     "pretest:unit": "node pre-test-component-builder.js && rollup -c rollup.test.config.js",

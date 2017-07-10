@@ -41,36 +41,23 @@
         }
       }
     }
+
+    p {
+      padding-bottom: 8px;
+    }
   }
 
   &,
   .main__content,
   .main__navigation {
-    height: 100%;
-    min-height: 100%;
     box-sizing: border-box;
   }
 
   .main__content {
-    display: flex;
-    flex-flow: row wrap;
     padding: 8px;
 
     @include mq($until: tablet) {
       padding-top: 32px;
-    }
-
-    &__body,
-    &__footer {
-      flex: 1 100%;
-    }
-
-    &__body {
-      align-self: flex-start;
-    }
-
-    &__footer {
-      align-self: flex-end;
     }
   }
 }

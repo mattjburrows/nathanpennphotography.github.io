@@ -13,6 +13,7 @@
         <div class="js-navigation-toggle"></div>
         {% include layout/navigation.html %}
         {{page.text}}
+        <p>&copy; <time>{{site.time | date: "%Y"}}</time> {{site.copyright}}</p>
       </div>
       <div class="main__content">
         {% include layout/svg-definitions.html %}
