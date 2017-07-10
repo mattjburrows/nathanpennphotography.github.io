@@ -42,7 +42,7 @@ describe('<Gallery>', () => {
       const { render, document } = getComponents('Gallery');
       const gallery = render({ images, title, visibility }).element;
 
-      assert(document.getElementById('test-mount').firstElementChild.classList.contains('gallery'));
+      assert(gallery.classList.contains('gallery'));
       assert(document.activeElement.classList.contains('gallery'));
     });
 
