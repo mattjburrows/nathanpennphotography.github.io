@@ -9,3 +9,13 @@ defaults:
       layout: "default"
 sass:
     style: compressed
+exclude: [
+  "test",
+  "npm-debug.log",
+  "package.json",
+  "pre-test-component-builder.js",
+  "README.md",
+  "rollup.config.js",
+  "rollup.test.config.js"
+]
+data_dir: data
